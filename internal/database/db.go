@@ -65,13 +65,13 @@ func runMigrations(db *sqlx.DB) {
 		question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE  
 	);
 
-	CREATE TABLE IF NOT EXISTS teams (
-		team_id UUID PRIMARY KEY,
-		team_name VARCHAR(255) NOT NULL UNIQUE,
-		team_members TEXT[] NOT NULL,
-		score INT NOT NULL,
-		time_remaining INTEGER DEFAULT 0
-	);
+	CREATE TABLE IF NOT EXISTS users (
+	id UUID PRIMARY KEY,
+	name VARCHAR(255) NOT NULL UNIQUE,
+	score INT NOT NULL,
+	time_remaining INTEGER DEFAULT 0
+);
+
 
 	
 	`)
