@@ -9,82 +9,80 @@ import (
 	"github.com/siam-vit/bughunt-be/internal/services"
 )
 
-func CreateTeam(c echo.Context) error {
+func CreateUser(c echo.Context) error {
 
-	var team models.Teams
-	if err := c.Bind(&team); err != nil {
+	var user models.User
+	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": "Failed to create team",
+			"message": "Failed to create user",
 			"data":    err.Error(),
 		})
 	}
 
-	err := services.CreateTeam(team)
+	err := services.CreateUser(user)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "Failed to create team",
+			"message": "Failed to create user",
 			"data":    err.Error(),
 		})
 	}
 	return c.JSON(http.StatusOK, map[string]string{
-		"message": "Successfully created team",
-		"data":    team.TeamName,
+		"message": "Successfully created user",
+		"data":    user.Name,
 	})
-
 }
 
-func GetAllTeams(c echo.Context) error {
-	teams, err := services.GetAllTeams()
+func GetAllUsers(c echo.Context) error {
+	users, err := services.GetAllUsers()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "Failed to fetch teams",
+			"message": "Failed to fetch users",
 			"data":    err.Error(),
 		})
 	}
-	return c.JSON(http.StatusOK, teams)
+	return c.JSON(http.StatusOK, users)
 }
 
-func UpdateTeam(c echo.Context) error {
-	var team models.Teams
-	if err := c.Bind(&team); err != nil {
+func UpdateUser(c echo.Context) error {
+	var user models.User
+	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": "Failed to update team",
+			"message": "Failed to update user",
 			"data":    err.Error(),
 		})
 	}
 
-	err := services.ModifyTeam(team)
+	err := services.ModifyUser(user)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "Failed to update team",
+			"message": "Failed to update user",
 			"data":    err.Error(),
 		})
 	}
 	return c.JSON(http.StatusOK, map[string]string{
-		"message": "Successfully updated team",
-		"data":    team.TeamName,
+		"message": "Successfully updated user",
+		"data":    user.Name,
 	})
 }
 
-func DeleteTeam(c echo.Context) error {
-	teamID := c.Param("id")
-	parseTeamID, err := uuid.Parse(teamID)
+func DeleteUser(c echo.Context) error {
+	userID := c.Param("id")
+	parseUserID, err := uuid.Parse(userID)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": "Failed to delete team",
+			"message": "Failed to delete user",
 			"data":    err.Error(),
 		})
 	}
-	err = services.DeleteTeam(parseTeamID)
+	err = services.DeleteUser(parseUserID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"message": "Failed to delete team",
+			"message": "Failed to delete user",
 			"data":    err.Error(),
 		})
 	}
 	return c.JSON(http.StatusOK, map[string]string{
-		"message": "Successfully deleted team",
-		"data":    teamID,
+		"message": "Successfully deleted user",
+		"data":    userID,
 	})
-
 }

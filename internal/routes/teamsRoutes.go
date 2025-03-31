@@ -8,8 +8,8 @@ import (
 func TeamRoutes(e *echo.Echo) {
 	r := e.Group("/teams")
 
-	r.POST("/createTeam", controllers.CreateTeam)
-	r.GET("/getAllTeams", controllers.GetAllTeams)
-	r.PUT("/updateTeam", controllers.UpdateTeam)
-	r.DELETE("/deleteTeam/:id", controllers.DeleteTeam)
+	r.POST("/createTeam", controllers.CreateUser)
+	r.GET("/getAllTeams", controllers.GetAllUsers)
+	r.PUT("/updateTeam", controllers.UpdateUser)
+	r.DELETE("/deleteTeam/:id", controllers.DeleteUser)
 }

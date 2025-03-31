@@ -5,94 +5,81 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	"github.com/siam-vit/bughunt-be/internal/database"
 	"github.com/siam-vit/bughunt-be/internal/models"
 )
 
-func CreateTeam(team models.Teams) error {
+func CreateUser(user models.User) error {
 	db := database.DB.Db
 
-	// ctx := context.Background()
-	// database.RedisClient.Del(ctx, "teams_by_score")
 	var exists bool
-	err := db.QueryRow(`SELECT EXISTS(SELECT 1 FROM teams WHERE team_name = $1)`, team.TeamName).Scan(&exists)
+	err := db.QueryRow(`SELECT EXISTS(SELECT 1 FROM users WHERE name = $1)`, user.Name).Scan(&exists)
 	if err != nil {
 		return err
 	}
 
 	if exists {
-		return fmt.Errorf("team with name '%s' already exists", team.TeamName)
+		return fmt.Errorf("user with name '%s' already exists", user.Name)
 	}
 
 	_, err = db.Exec(`
-        INSERT INTO teams (team_id, team_name, team_members, score)
+        INSERT INTO users (id, name, score, time_remaining)
         VALUES ($1, $2, $3, $4)`,
-		uuid.New(), team.TeamName, pq.Array(team.TeamMembers), team.Score)
+		uuid.New(), user.Name, user.Score, user.TimeRemaining)
 
 	if err != nil {
 		return err
 	}
 	return nil
-
 }
 
-func GetAllTeams() ([]models.Teams, error) {
+func GetAllUsers() ([]models.User, error) {
 	db := database.DB.Db
 
-	rows, err := db.Query(`SELECT team_id, team_name, team_members, score, time_remaining FROM teams ORDER BY score DESC`)
+	rows, err := db.Query(`SELECT id, name, score, time_remaining FROM users ORDER BY score DESC`)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var teams []models.Teams
+	var users []models.User
 
 	for rows.Next() {
-		var team models.Teams
-		var members pq.StringArray
-
-		err := rows.Scan(&team.TeamID, &team.TeamName, &members, &team.Score, &team.TimeRemaining)
+		var user models.User
+		err := rows.Scan(&user.ID, &user.Name, &user.Score, &user.TimeRemaining)
 		if err != nil {
 			return nil, err
 		}
-
-		team.TeamMembers = []string(members)
-		teams = append(teams, team)
+		users = append(users, user)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return teams, nil
+	return users, nil
 }
 
-func ModifyTeam(team models.Teams) error {
+func ModifyUser(user models.User) error {
 	db := database.DB.Db
 
-	query := `UPDATE teams SET `
+	query := `UPDATE users SET `
 	params := []interface{}{}
 	paramCount := 1
 
-	if team.TeamName != "" {
-		query += fmt.Sprintf("team_name = $%d, ", paramCount)
-		params = append(params, team.TeamName)
+	if user.Name != "" {
+		query += fmt.Sprintf("name = $%d, ", paramCount)
+		params = append(params, user.Name)
 		paramCount++
 	}
-	if len(team.TeamMembers) > 0 {
-		query += fmt.Sprintf("team_members = $%d, ", paramCount)
-		params = append(params, pq.Array(team.TeamMembers))
-		paramCount++
-	}
-	if team.Score != 0 {
+	if user.Score != 0 {
 		query += fmt.Sprintf("score = $%d, ", paramCount)
-		params = append(params, team.Score)
+		params = append(params, user.Score)
 		paramCount++
 	}
-	if team.TimeRemaining != 0 {
+	if user.TimeRemaining != 0 {
 		query += fmt.Sprintf("time_remaining = $%d, ", paramCount)
-		params = append(params, team.TimeRemaining)
+		params = append(params, user.TimeRemaining)
 		paramCount++
 	}
 
@@ -101,8 +88,8 @@ func ModifyTeam(team models.Teams) error {
 	}
 	query = query[:len(query)-2]
 
-	query += fmt.Sprintf(" WHERE team_id = $%d", paramCount)
-	params = append(params, team.TeamID)
+	query += fmt.Sprintf(" WHERE id = $%d", paramCount)
+	params = append(params, user.ID)
 
 	_, err := db.Exec(query, params...)
 	if err != nil {
@@ -111,10 +98,10 @@ func ModifyTeam(team models.Teams) error {
 	return nil
 }
 
-func DeleteTeam(teamID uuid.UUID) error {
+func DeleteUser(userID uuid.UUID) error {
 	db := database.DB.Db
 
-	_, err := db.Exec(`DELETE FROM teams WHERE team_id = $1`, teamID)
+	_, err := db.Exec(`DELETE FROM users WHERE id = $1`, userID)
 	if err != nil {
 		return err
 	}
