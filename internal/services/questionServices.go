@@ -41,7 +41,7 @@ func GetQuestionsByDifficulty(difficulty string, language string) ([]models.Ques
 		var input, output *string
 		var tQuestionID *uint
 
-		err := rows.Scan(&qID, &qText, &set, &lang, &diff, &testCaseID, &input, &output, &tQuestionID)
+		err := rows.Scan(&qID, &qText, &set, &diff,&lang, &testCaseID, &input, &output, &tQuestionID)
 		if err != nil {
 			return nil, err
 		}
@@ -50,6 +50,7 @@ func GetQuestionsByDifficulty(difficulty string, language string) ([]models.Ques
 			questionsMap[qID] = &models.Question{
 				ID:         qID,
 				Question:   qText,
+				Language: lang,
 				Set:        set,
 				Difficulty: diff,
 				TestCases:  []models.TestCases{},

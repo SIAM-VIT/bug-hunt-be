@@ -10,9 +10,8 @@ type TestCases struct {
 type Question struct {
 	ID         uint        `json:"id"`
 	Question   string      `json:"question"`
-	Language string 	`json:"`
+	Language   string      `json:"language"`
 	TestCases  []TestCases `json:"testCaseId"`
 	Set        uint        `json:"set"`
 	Difficulty string      `json:"difficulty"`
 }
-
