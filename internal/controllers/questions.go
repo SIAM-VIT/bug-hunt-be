@@ -30,9 +30,11 @@ func CreateQuestion(c echo.Context) error {
 	})
 }
 
-func GetQuestionsByDifficulty(c echo.Context) error {
+func GetQuestionsByDifficultyAndLanguage(c echo.Context) error {
 	difficulty := c.QueryParam("difficulty")
-	questions, err := services.GetQuestionsByDifficulty(difficulty)
+	language := c.QueryParam("language")
+
+	questions, err := services.GetQuestionsByDifficulty(difficulty, language)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": "Failed to fetch questions",

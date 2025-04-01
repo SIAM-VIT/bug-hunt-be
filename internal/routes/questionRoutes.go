@@ -8,7 +8,7 @@ import (
 func QuestionRoutes(e *echo.Echo) {
 	r := e.Group("/questions")
 	r.POST("/createQuestion", controllers.CreateQuestion)
-	r.GET("/getQuestionsByDifficulty", controllers.GetQuestionsByDifficulty)
+	r.GET("/getQuestionsByDifficulty", controllers.GetQuestionsByDifficultyAndLanguage)
 	r.POST("/createTestCase", controllers.CreateTestCase)
 	r.GET("/getAllTestCases", controllers.GetAllTestCases)
 

@@ -53,6 +53,7 @@ func runMigrations(db *sqlx.DB) {
 	CREATE TABLE IF NOT EXISTS questions (
 		id SERIAL PRIMARY KEY,  
 		question TEXT NOT NULL,
+		language VARCHAR(255) NOT NULL,
 		test_case_id INTEGER[],  
 		set INT NOT NULL,
 		difficulty VARCHAR(255) NOT NULL

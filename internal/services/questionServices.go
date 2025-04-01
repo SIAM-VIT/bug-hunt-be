@@ -9,24 +9,23 @@ func CreateQuestion(question models.Question) error {
 	db := database.DB.Db
 
 	_, err := db.Exec(`
-		INSERT INTO questions ( question, set, difficulty)
-		VALUES ($1, $2, $3)`,
-		question.Question, question.Set, question.Difficulty)
+		INSERT INTO questions ( question, set, language, difficulty)
+		VALUES ($1, $2, $3, $4)`,
+		question.Question, question.Set, question.Language, question.Difficulty)
 	return err
 }
 
-func GetQuestionsByDifficulty(difficulty string) ([]models.Question, error) {
+func GetQuestionsByDifficulty(difficulty string, language string) ([]models.Question, error) {
 	db := database.DB.Db
 	var questionsMap = make(map[uint]*models.Question)
 	var questions []models.Question
 
 	rows, err := db.Query(`
-		SELECT q.id, q.question, q.set, q.difficulty, 
+		SELECT q.id, q.question, q.set, q.difficulty, q.language,
 		       t.id, t.input, t.output, t.question_id
 		FROM questions q
 		LEFT JOIN test_cases t ON q.id = t.question_id
-		WHERE q.difficulty = $1
-	`, difficulty)
+		WHERE q.difficulty = $1 AND q.language = $2`, difficulty, language)
 	if err != nil {
 		return nil, err
 	}
@@ -36,12 +35,13 @@ func GetQuestionsByDifficulty(difficulty string) ([]models.Question, error) {
 		var qID uint
 		var qText string
 		var set uint
+		var lang string
 		var diff string
 		var testCaseID *uint
 		var input, output *string
 		var tQuestionID *uint
 
-		err := rows.Scan(&qID, &qText, &set, &diff, &testCaseID, &input, &output, &tQuestionID)
+		err := rows.Scan(&qID, &qText, &set, &lang, &diff, &testCaseID, &input, &output, &tQuestionID)
 		if err != nil {
 			return nil, err
 		}
