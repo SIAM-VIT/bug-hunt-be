@@ -1,13 +1,13 @@
 <p align="center"><img src="https://imgur.com/Vp4LWt0.png" width=160 title="SIAM-VIT" alt="SIAM-VIT"></a>
 </p>
 <div align="center">
-  <h3 align="center">Coding Relay Backend</h3>
+  <h3 align="center">Bug Hunt 2.0 Backend</h3>
 
   <p align="center">
     <br />
-    <a href="https://github.com/SIAM-VIT/coding-relay-be/issues">Report Bug</a>
+    <a href="https://github.com/SIAM-VIT/bug-hunt-be/issues">Report Bug</a>
     ·
-    <a href="https://github.com/SIAM-VIT/coding-relay-be/issues">Request Feature</a>
+    <a href="https://github.com/SIAM-VIT/bug-hunt-be/issues">Request Feature</a>
   </p>
 </div>
 
@@ -27,12 +27,13 @@
 
 ## About The Project
 
-This is the backend API for the Coding Relay, SIAM-VIT's Flagship Event in VIT's fest, Yantra. The API is responsible for handling user authentication, team registration, and leaderboard updation. The API is built using Go and PostgreSQL, and Redis is used for caching.
+This is the backend API for the Bug Hunt 2.0, SIAM-VIT's technical event. The API is responsible for handling user registration, question fetching and leaderboard score updation. The API is built using Go and PostgreSQL, and Redis is used for caching.
 
 Key Features:
 
-- Real time leaderboard monitoring
-- Team score updation
+- Questions fetched from database by language and level of difficulty
+- User registration
+- Score updation
 
 ### Built With
 
@@ -61,14 +62,14 @@ Make sure you have the following installed:
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/SIAM-VIT/coding-relay-be.git
+   git clone https://github.com/SIAM-VIT/bug-hunt-be.git
 
    ```
 
 2. Change into the project directory
 
    ```sh
-   cd coding-relay-be
+   cd bug-hunt-be
 
    ```
 
