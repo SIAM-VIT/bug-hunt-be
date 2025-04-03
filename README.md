@@ -41,7 +41,6 @@ This project is built using the following technologies and frameworks:
 
 - [Go](https://golang.org/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [Redis](https://redis.io/docs/latest/)
 
 <!-- GETTING STARTED -->
 
@@ -89,14 +88,6 @@ Make sure you have the following installed:
     DB_USER=abc
     DB_PASSWORD=abc
     DB_NAME=abc
-
-    # Redis Configuration
-    REDIS_HOST=abc
-    REDIS_PORT=abc
-    REDIS_PASSWORD=abc
-    REDIS_DB=abc
-
-    REDIS_URI=abc
 
     JWT_SECRET_KEY=abc
 
